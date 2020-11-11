@@ -21,7 +21,7 @@ class Board extends React.Component {
                 );
     }
 
-    renderLocation(str) {
+    static renderLocation(str) {
         return (
             <div className="location">{str}</div>
         )
@@ -31,25 +31,25 @@ class Board extends React.Component {
         return (
             <div>
                 <div className="board-row">
-                    {this.renderLocation('')}
-                    {this.renderLocation('A')}
-                    {this.renderLocation('B')}
-                    {this.renderLocation('C')}
+                    {Board.renderLocation('')}
+                    {Board.renderLocation('A')}
+                    {Board.renderLocation('B')}
+                    {Board.renderLocation('C')}
                 </div>
                 <div className="board-row">
-                    {this.renderLocation('1')}
+                    {Board.renderLocation('1')}
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
                     {this.renderSquare(2)}
                 </div>
                 <div className="board-row">
-                    {this.renderLocation('2')}
+                    {Board.renderLocation('2')}
                     {this.renderSquare(3)}
                     {this.renderSquare(4)}
                     {this.renderSquare(5)}
                 </div>
                 <div className="board-row">
-                    {this.renderLocation('3')}
+                    {Board.renderLocation('3')}
                     {this.renderSquare(6)}
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
@@ -75,6 +75,7 @@ class Game extends React.Component {
 
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        cleanBoldLinks(history.length);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         const step = getStepLocation(i);
@@ -92,11 +93,14 @@ class Game extends React.Component {
         });
     }
 
-    jumpTo(step) {
+    jumpTo(step, length) {
+        cleanBoldLinks(length);
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
         });
+        const node = document.getElementById('link' + step);
+        node.style.fontWeight = 'bold';
     }
 
     render() {
@@ -110,7 +114,7 @@ class Game extends React.Component {
            'Go to game start';
            return (
                <li key={move}>
-                   <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                   <button id={'link' + move} onClick={() => this.jumpTo(move, history.length)}>{desc}</button>
                </li>
            )
 
@@ -180,6 +184,13 @@ function getStepLocation(i) {
         ['C','3']
     ];
     return steps[i];
+}
+
+function cleanBoldLinks(length) {
+    for (let i = 0; i < length; i++) {
+        const node = document.getElementById('link' + i);
+        node.style.fontWeight = '';
+    }
 }
 
 // ========================================
