@@ -48,3 +48,11 @@ ol, ul {
 .game-info {
     margin-left: 20px;
 }
+
+.location {
+    float: left;
+    line-height: 34px;
+    height: 34px;
+    text-align: center;
+    width: 34px;
+}
